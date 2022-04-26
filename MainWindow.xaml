@@ -1,0 +1,62 @@
+﻿<winex:WindowEx
+    x:Class="LAB_7.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:winex="using:WinUIEx"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Eeeeeee"
+    MinHeight="500"
+    MinWidth="530"
+    Height="500"
+    Width="660">
+
+    <StackPanel HorizontalAlignment="Stretch" Style="{StaticResource RootStackPanel}">
+        <CommandBar x:Name="CmdBar" IsDynamicOverflowEnabled="True" CornerRadius="10">
+            <AppBarButton x:Name="SwitchInputButton" IsTabStop="False"                   MinWidth="120" Icon="Rename"     Label="Input values"   Click="SwitchInputVisibility_Click"/>
+            <AppBarButton x:Name="ProcessDataButton" IsTabStop="False" IsEnabled="False" MinWidth="120" Icon="PostUpdate" Label="Process values" Click="ProcessData_Click"/>
+            <AppBarButton x:Name="RandomInputButton" IsTabStop="False"                   MinWidth="120" Icon="List"       Label="Random input"   Click="RandomInputButton_Click"/>
+            <AppBarButton x:Name="FileInputButton"   IsTabStop="False"                   MinWidth="120" Icon="OpenFile"   Label="Load from file" Click="OpenFileButton_Click"/>
+            <AppBarButton x:Name="SaveToFileButton"  IsTabStop="False" IsEnabled="False" MinWidth="120" Icon="Save"       Label="Save to file"   Click="SaveToFileButton_Click"/>
+            <AppBarButton x:Name="ExitAppButton"     IsTabStop="False"                   MinWidth="120" Icon="Forward"    Label="Exit"           Click="ExitApplication"/>
+
+            <CommandBar.Content>
+                <Viewbox Margin="10" MinWidth="200" Height="30" Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <TextBlock HorizontalAlignment="Center" Style="{StaticResource SubheaderTextBlock}">
+                        Laboratory task <Hyperlink Click="Hyperlink_Click" UnderlineStyle="None" IsTabStop="False">№7</Hyperlink> (variant №14)
+                    </TextBlock>
+                </Viewbox>
+            </CommandBar.Content>
+        </CommandBar>
+
+        <Border Height="5"></Border>
+
+        <StackPanel x:Name="StringInputPanel" Visibility="Collapsed" Padding="20">
+            <TextBlock FontSize="15">Input values:</TextBlock>
+            <Border x:Name="InputTextBoxBorder" Margin="-2,2,-2,0" BorderThickness="1">
+                <TextBox x:Name="InputTextBox" HorizontalAlignment="Stretch" TextChanged="InputTextBox_TextChanged" KeyDown="InputTextBox_KeyDown" GotFocus="InputTextBox_FocusEngaged" LostFocus="InputTextBox_FocusDisengaged"/>
+            </Border>
+            <TextBlock x:Name="EnterTipTextBlock" FontSize="10" Opacity="0">Press Enter to process</TextBlock>
+        </StackPanel>
+
+        <Grid x:Name="StringOutputGrid" Padding="20" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition x:Name="OutputTextBoxRow" Height="235"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Column="0" Grid.Row="0" FontSize="15">Result:</TextBlock>
+            <Border Grid.Column="0" Grid.Row="1" VerticalAlignment="Stretch" BorderBrush="AliceBlue" BorderThickness="1">
+                <TextBox x:Name="OutputTextBox" Margin="-1" HorizontalAlignment="Stretch" IsSpellCheckEnabled="False" AcceptsReturn="True" TextWrapping="Wrap" PreviewKeyDown="OutputTextBox_PreviewKeyDown"/>
+            </Border>
+        </Grid>
+
+        <TeachingTip x:Name="ErrorTip" Title="Error" PreferredPlacement="Auto" PlacementMargin="20" IsLightDismissEnabled="True" CloseButtonContent="Close"/>
+
+    </StackPanel>
+</winex:WindowEx>
