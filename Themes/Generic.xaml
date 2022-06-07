@@ -119,12 +119,6 @@
         <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
 
-    <Style TargetType="GridView">
-        <Setter Property="Header" Value="111">
-            
-        </Setter>
-    </Style>
-    
     <!--RadioButtons-->
     <Style TargetType="RadioButtons">
         <Setter Property="FontFamily" Value="Consolas"/>

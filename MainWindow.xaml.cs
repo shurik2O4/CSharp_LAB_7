@@ -5,9 +5,11 @@ using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using WinUIEx;
@@ -41,31 +43,28 @@ namespace LAB_7 {
         }
 
         private void ProcessData() {
+            // Useless variable
+            string input = InputTextBox.Text;
             // Find minimal
             double? min = null;
-            foreach (string s in InputTextBox.Text.Split()) {
-                double v = double.Parse(s);
-                if (!min.HasValue || min > v) min = v;
+            foreach (double d in Regex.Matches(input, "(?:-\\d*(\\.|,)\\d+)|(?:-\\d+(\\.|,)?\\d*)", RegexOptions.ExplicitCapture).Select((m) => double.Parse(m.Value))) {
+                if (!min.HasValue || min > d) min = d;
             }
 
-            string s_min = min.ToString();
-            string res = "";
-            foreach (string s in InputTextBox.Text.Split()) {
-                double v = double.Parse(s);
-                if (res != "") res += " ";
+            // Replacing all numbers < -1 with found minimal. No array & no loop.
+            string result = Regex.Replace(InputTextBox.Text, "-0*([1-9])\\d*\\.\\d+", min.ToString());
 
-                res += v < -1 ? s_min : s;
-            }
-
-            OutputTextBox.Text = res;
+            OutputTextBox.Text = result;
 
             StringOutputGrid.Visibility = Visibility.Visible;
             SaveToFileButton.IsEnabled = true;
         }
 
         private void InputTextBox_TextChanged(object sender, TextChangedEventArgs e) {
+            if (StringOutputGrid.Visibility == Visibility.Visible) StringOutputGrid.Visibility = Visibility.Collapsed;
+            if (SaveToFileButton.IsEnabled) SaveToFileButton.IsEnabled = false;
+
             if (InputTextBox.Text.Length == 0) {
-                //InputTextBoxBorder.BorderBrush = App.Current.Resources["TextBoxDefaultBorder"] as Brush;
                 InputTextBoxBorder.BorderBrush = null;
                 ProcessDataButton.IsEnabled = false;
                 // Don't run code below, because check will fail and display red border
@@ -80,9 +79,6 @@ namespace LAB_7 {
                 InputTextBoxBorder.BorderBrush = new SolidColorBrush(Colors.Red);
                 ProcessDataButton.IsEnabled = false;
             }
-
-            //if (regex.Match(InputTextBox.Text).Success) { InputTextBoxBorder.BorderBrush = App.Current.Resources["TextBoxCorrectDataBorder"] as Brush; }
-            //else { InputTextBoxBorder.BorderBrush = App.Current.Resources["TextBoxIncorrectDataBorder"] as Brush; }
         }
 
         private void InputTextBox_KeyDown(object sender, KeyRoutedEventArgs e) {
@@ -161,7 +157,7 @@ namespace LAB_7 {
             // Create the file picker
             FileSavePicker filePicker = new() { SuggestedStartLocation = PickerLocationId.Desktop, SuggestedFileName = "result" };
             // Add file type to save as
-            filePicker.FileTypeChoices.Add("File lab7", new List<string>() { ".lab7" });
+            filePicker.FileTypeChoices.Add("Result", new List<string>() { ".lab7" });
 
             // Associate the HWND with the file picker
             var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
@@ -193,14 +189,10 @@ namespace LAB_7 {
 
         private bool seven = true;
         private void Hyperlink_Click(Hyperlink sender, HyperlinkClickEventArgs args) {
-            if (seven) {
-                sender.Inlines.Clear();
-                sender.Inlines.Add(new Run() { Text = "🤔" });
-            }
-            else {
-                sender.Inlines.Clear();
-                sender.Inlines.Add(new Run() { Text = "№7" });
-            }
+            if (seven)
+                sender.Inlines[0] = new Run() { Text = "🤔" };
+            else
+                sender.Inlines[0] = new Run() { Text = "№7" };
 
             seven = !seven;
         }

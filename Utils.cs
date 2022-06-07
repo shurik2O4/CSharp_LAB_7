@@ -11,7 +11,7 @@ namespace LAB_7
         internal static bool CheckInput(string input) {
             input = input.Trim();
             foreach (string v in input.Split()) {
-                if (!float.TryParse(v, out _)) {
+                if (!Regex.IsMatch(v, "(-?\\d*\\.|,\\d+)|(-?\\d+(\\.|,)?\\d*)")) {
                     return false;
                 }
             }
